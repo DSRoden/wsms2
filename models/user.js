@@ -1,6 +1,6 @@
 'use strict';
 
-//var Message = require('./message.js');
+var Message = require('./message.js');
 
 function User(o){
 	this.number = o.From;
@@ -27,19 +27,16 @@ User.incoming = function(body, cb){
 	// });
 	User.collection.findOne({number: from}, function(err, user){
 	    if(user){
-	    	reply = 'user exists';
-	    	// require('./message.js').type(user, body, function(reply){
+	    	Message.type(user, body, function(reply){
     			cb(reply);	    	 
-	    	// });
+	    	});
 	    } else {
 	    	var user = new User(body);
 	    	User.collection.save(user, body, function(err, user){
 	    		//console.log('user object returned after being saved', user);
-	    		// require('./message.js').type(user, function(reply){
-
-	    		// })
-	    		reply = user.number;
-	    		cb(reply);
+	    		Message.type(user, function(reply){
+	    			cb(reply);
+	    		})
 	    	});
 	  	}
     });
