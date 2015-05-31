@@ -32,9 +32,9 @@ User.incoming = function(body, cb){
 	    	});
 	    } else {
 	    	var user = new User(body);
-	    	User.collection.save(user, body, function(err, user){
+	    	User.collection.save(user, function(err, user){
 	    		//console.log('user object returned after being saved', user);
-	    		Message.type(user, function(reply){
+	    		Message.type(user, body, function(reply){
 	    			cb(reply);
 	    		})
 	    	});

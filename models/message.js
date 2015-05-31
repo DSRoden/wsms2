@@ -1,7 +1,11 @@
 'use strict';
 
 function Message(o){
-
+	this.senderId = o.senderId;
+	this.receiverId = o.receiverId;
+	this.content = o.content || 'No content';
+	this.liked = false;
+	this.created_at = new Date();
 }
 
 Object.defineProperty(Message, 'collection', {
@@ -10,13 +14,30 @@ Object.defineProperty(Message, 'collection', {
 
 
 Message.type = function(user, body, cb){
-	console.log('body from user.questionnaire>>>>>>>>>>>', body);
-	// User.collection.drop();
-	
-	// console.log('from >>>>>>>>>>>>>>>>>', from);
-	var from = body.From;
-	var reply = 'coming back from message.type function';
-	cb(reply);
+	//new message is coming in from a user
+	console.log('user sending message', user);
+	console.log('body from message', body);
+	var incomingMessage = {};
+	incomingMessage.senderId = user._id;
+	incomingMessage.content = body.Body;
+	var newMessage = new Message(incomingMessage);
+
+	//find the previous message
+	Message.collection.find().limit(1).sort({$natural:-1}).toArray(function(err, message){
+		if(err){
+			cb('error in looking up messages', err)
+		}
+		receiverId = user._id,
+		senderId = message.senderId;
+		//take current user id and add it to the message as receiver id
+		Message.colection.update({"senderId" : senderId} , {$set: {"receiverId" : receiverId}}, function(){
+			//then save the new message
+			Message.save(newMessage, function(){
+				//then call back with the previous messag object
+				cb(previousMessage);
+			})
+		});
+	});
 };
 
 
