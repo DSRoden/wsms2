@@ -29,7 +29,7 @@ Message.type = function(user, body, cb){
 			console.log('results of look up when error occured', message);
 			cb('error in looking up messages', err)
 		}
-		receiverId = user._id,
+		var receiverId = user._id,
 		senderId = message.senderId;
 		//take current user id and add it to the message as receiver id
 		Message.colection.update({"senderId" : senderId} , {$set: {"receiverId" : receiverId}}, function(){
