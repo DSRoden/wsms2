@@ -25,6 +25,8 @@ Message.type = function(user, body, cb){
 	//find the previous message
 	Message.collection.find().limit(1).sort({$natural:-1}).toArray(function(err, message){
 		if(err){
+			console.log('error in looking up message collection', err);
+			console.log('results of look up when error occured', message);
 			cb('error in looking up messages', err)
 		}
 		receiverId = user._id,
