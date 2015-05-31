@@ -8,8 +8,8 @@ var twilio_post = Promise.promisify(twilio_client.sms.messages.post);
 
 var User = require('../models/user');
 
-exports.questionnaire = function(req, res){
-	User.questionnaire(req.body, function(reply){
+exports.incoming = function(req, res){
+	User.incoming(req.body, function(reply){
 		//console.log('reply>>>>>>>>>>', reply);
 		var from = req.body.From;
 		return twilio_post({

@@ -16,11 +16,17 @@ var express = require('express'),
 
 	users = require('./controllers/users.js');
 
+	//default mongo connection
+	// if(services['mongodb-2.4']){
+	// 	mongoUrl = services['mongodb-2.4'][0].credentials.url;
+	// }
 
-	if(services['mongodb-2.4']){
-		mongoUrl = services['mongodb-2.4'][0].credentials.url;
+	//mongo lab service connection 
+	if(services['mongolab']){
+		mongoUrl = services['mongolab'][0].credentials.uri;
 	}
 
+	//connect to mongo
 	mongo.connect(mongoUrl, function(err, db){
 		if(err){ 
 			console.log('failed to connect to db>>>>>>', err);
@@ -29,8 +35,7 @@ var express = require('express'),
 		}
 	});
 
-	app.post('/receive', users.questionnaire);
-
+	app.post('/receive', users.incoming);
 	
 app.listen(appEnv.port || 3000, appEnv.bind || 'localhost', function() {
 	// print a message when the server starts listening
