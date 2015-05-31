@@ -27,16 +27,19 @@ User.incoming = function(body, cb){
 	// });
 	User.collection.findOne({number: from}, function(err, user){
 	    if(user){
-	    	require('./message.js').type(user, body, function(reply){
+	    	reply = 'user exists';
+	    	// require('./message.js').type(user, body, function(reply){
     			cb(reply);	    	 
-	    	});
+	    	// });
 	    } else {
 	    	var user = new User(body);
 	    	User.collection.save(user, body, function(err, user){
 	    		//console.log('user object returned after being saved', user);
-	    		require('./message.js').type(user, function(reply){
+	    		// require('./message.js').type(user, function(reply){
 
-	    		})
+	    		// })
+	    		reply = user.number;
+	    		cb(reply);
 	    	});
 	  	}
     });
