@@ -17,8 +17,8 @@ User.incoming = function(body, cb){
 	// User.collection.drop();
 	
 	// console.log('from >>>>>>>>>>>>>>>>>', from);
-	var from = body.From;
-	var reply;
+	var from = body.From,
+		reply;
 
 	//show all users
 	// User.collection.find().toArray(function(err, response){
@@ -27,14 +27,17 @@ User.incoming = function(body, cb){
 	// });
 	User.collection.findOne({number: from}, function(err, user){
 	    if(user){
-	    	Message.type(user, body, function(reply){
-    			cb(reply);	    	 
+	    	Message.type(user, body, function(messageObject){
+	    		console.log('oobject returning from message into user', messageObject);
+	    		//reply = messageObject.content;
+    			cb(messageObject);	    	 
 	    	});
 	    } else {
 	    	var user = new User(body);
 	    	User.collection.save(user, function(err, user){
 	    		//console.log('user object returned after being saved', user);
-	    		Message.type(user, body, function(reply){
+	    		Message.type(user, body, function(messageObject){
+	    			reply = messageObject.content;
 	    			cb(reply);
 	    		})
 	    	});

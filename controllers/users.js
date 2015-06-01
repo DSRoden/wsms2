@@ -10,12 +10,13 @@ var User = require('../models/user');
 
 exports.incoming = function(req, res){
 	User.incoming(req.body, function(reply){
-		//console.log('reply>>>>>>>>>>', reply);
+		console.log('reply>>>>>>>>>>', reply);
+		console.log('content', reply[0].content);
 		var from = req.body.From;
 		return twilio_post({
 	          to: from,
 	          from: '+18452336666',
-	          body: reply
+	          body: reply[0].content
 	        }).then(function(message) {
 	            //console.log('Success sent');
 	            //console.log(message);
